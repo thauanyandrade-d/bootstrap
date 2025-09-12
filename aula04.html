@@ -10,15 +10,14 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
 
-
     <title>Aula04 - Bootstrap - formularios</title>
   </head>
   <body>
     
     <div class="container form-container bg-success">
-        <h2 class="text-center mb-4">Formulario Completo -  Bootstrap 4.1</h2>
+        <h2 class="text-center mb-4">Formulario Completo - Bootstrap 4.1</h2>
         <p class="text-center text-muted mb-4">
-            Demonstração de todos os tamanhos e tipos de campos 
+            Demonstração de todos os tamanhos e tipos de campos
         </p>
 
         <form action="">
@@ -33,51 +32,121 @@
                 <div class="form-group">
                     <label for="inputDefault">campo Médio</label>
                     <input type="text" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label for="inputSmall">campo Pequeno</label>
-              <input type="text" class="form-control form-control-sm">
-             </div>
-
-
-             <div class="form-row bg-warning">
-              <div class="col-md-8 mb-3">
-                <label for="inputDefault">campo Médio</label>
-                <input type="text" class="form-control">
-              </div>
-             </div>
-             
-             <div class="form-row bg-warning">
-              <div class="col-md-4 mb-3">
-                <label for="inputDefault">campo Médio</label>
-                <input type="text" class="form-control">
-              </div>
-              <div class="col-md-2 mb-3">
-                <label for="inputDefault">campo Médio</label>
-                <input type="text" class="form-control">
-              </div>
-             </div>
-              <!--Tipo de Input-->
-              <div class="form-section">
-                <h4><i class="fas fa-keyboard"></i>Tipos de Input</h4>
-                <div class="form-group">
-                  <label for="">Email</label>
-                  <input type="email" class="form-control" id="inputEmail" placeholder="seu@email">
                 </div>
-              </div>
 
-              
+                <div class="form-group">
+                    <label for="inputSmall">campo Pequeno</label>
+                    <input type="text" class="form-control form-control-sm">
+                </div>
+
+
+                <div class="form-row bg-warning">
+                  <div class="col-md-8 mb-3">
+                    <label for="inputDefault">campo Médio</label>
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-row bg-warning">
+                  <div class="col-md-4 mb-3">
+                    <label for="inputDefault">campo Médio</label>
+                    <input type="text" class="form-control">
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <label for="inputDefault">campo Médio</label>
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+
+
+                <!-- Tipos de Inputs -->
+                <div class="form-section">
+                  <h4><i class="fas fa-keyboard"></i>Tipos de inputs</h4>
+                  
+                  <div class="form-group">
+                    <label for="">Email</label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="seu@email">
+                  </div>
+
+                   
+                  <div class="form-group">
+                    <label for="">Senha</label>
+                    <input type="password" class="form-control" id="inputSenha" placeholder="sua senha:">
+                  </div>
+
+                   
+                  <div class="form-group">
+                    <label for="">Número</label>
+                    <input type="number" class="form-control" id="inputNumero" placeholder="123">
+                  </div>
+
+                   
+                  <div class="form-group">
+                    <label for="">Data</label>
+                    <input type="date" class="form-control" id="inputDate">
+                  </div>
+
+                   
+                  <div class="form-group">
+                    <label for="">Upload de Arquivo</label>
+                    <input type="file" class="form-control-file" id="inputFile" >
+                  </div>
+                </div>
+
+                <!-- select e select-personalizado -->
+                 <div class="form-group">
+                    <label for="selectCustom">Selecione uma opção</label>
+                    <select id="selectCustom" class="form-control">
+                        <option value="">1</option>
+                        <option value="">2</option>
+                        <option value="">3</option>
+                    </select>
+                 </div>
+                 <div class="form-group">
+                    <label for="selectCustom">Selecione uma opção (customizado)</label>
+                    <select id="selectCustom" class="custom-select">
+                        <option value="1">Opção 1</option>
+                        <option value="2">Opção 2</option>
+                        <option value="3">Opção 3</option>
+                    </select>
+                 </div>
+
+                 <!-- Textarea -->
+                  <div class="form-section">
+                    <h4> <i class="fas fa-align-left"></i> Textarea </h4>
+                    <div class="form-section">
+                      <textarea name="" id=""class="form-control"placeholder="Digite sua mensagem" rows="3"></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Checkboxes e radios-->
+                   <div class="form-section">
+                    <h4> <i></i> Checkboxes e radios</h4>
+                    <div class="form-group">
+                      <label for="">Checkboxes</label><br>
+                      <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" value="option1">
+                        <label for="" class="form-check-label">Opção1</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" value="option2">
+                        <label for="" class="form-check-label">Opção2</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" value="option3">
+                        <label for="" class="form-check-label">Opção3</label>
+                      </div>
+                    </div>
+                   </div>
+
             </div>
         </form>
     </div>
 
 
+    <div class="mb-5">
 
-
-
-
-
+    </div>
 
 
 
