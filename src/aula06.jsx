@@ -1,39 +1,54 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-class Aula06 extends Component {
+export default class Aula06 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     nome: '',
+      nome: '',
+      sobrenome: ''
     };
-    this.pegaNome = this.pegaNome.bind(this);
-  
   }
-  
+
   pegaNome(texto) {
-    if(texto.length > 0) {
-      this.setState({nome: "Bem vindo: " + texto})
-    }else{
-      this.setState({nome: ''})
+    if (texto.length > 0) {
+      this.setState({ nome: "Bem vindo: " + texto });
+    } else {
+      this.setState({ nome: '' });
+    }
+  }
+
+  pegaSobrenome(texto) {
+    if (texto.length > 0) {
+      this.setState({ sobrenome: "Sobrenome: " + texto });
+    } else {
+      this.setState({ sobrenome: '' });
     }
   }
 
   render() {
     return (
       <View style={styles.container}>
+    
         <TextInput 
-        style={styles.TextInput}
-        placeholder='Digite seu nome:'
-        underlineColorAndroid="transparent"
-        onChangeText={this.pegaNome}
+          style={styles.TextInput}
+          placeholder='Digite seu nome:'
+          underlineColorAndroid="transparent"
+          onChangeText={this.pegaNome.bind(this)}
         />
-        <Text style= {styles.texto}>{this.state.nome}</Text>
+        <Text style={styles.texto}>{this.state.nome}</Text>
+
+        <TextInput 
+          style={styles.TextInput}
+          placeholder='Digite seu sobrenome:'
+          underlineColorAndroid="transparent"
+          onChangeText={this.pegaSobrenome.bind(this)}
+        />
+        <Text style={styles.texto}>{this.state.sobrenome}</Text>
       </View>
     );
   }
 }
-export default Aula06;
 
 const styles = StyleSheet.create({
   container: {
@@ -41,7 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input:{
+  TextInput: { 
     height: 45,
     borderWidth: 1,
     borderColor: '#222',
@@ -52,7 +67,5 @@ const styles = StyleSheet.create({
   texto: {
     textAlign: 'center',
     fontSize: 25,
-
   }
 });
-
