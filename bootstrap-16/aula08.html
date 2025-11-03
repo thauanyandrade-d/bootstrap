@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Gerenciamento</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+  <style>
+    body {
+      padding-top: 56px;
+      background-color: #f8f9fa;
+    }
+
+    #sidebar {
+      min-width: 250px;
+      max-width: 250px;
+      background: #343a40;
+      color: #fff;
+      transition: all 0.3s;
+      position: fixed;
+      height: calc(100vh - 56px);
+      top: 56px;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    #sidebar .sidebar-header {
+      padding: 20px;
+      background: #212529;
+    }
+
+    #sidebar ul.components {
+      padding: 10px 0;
+    }
+
+    #sidebar ul li a {
+      padding: 12px 20px;
+      font-size: 1.1em;
+      display: block;
+      color: #adb5bd;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    #sidebar ul li a:hover {
+      background: #495057;
+      color: #fff;
+    }
+
+    #sidebar ul li.active > a {
+      background: #007bff;
+      color: #fff;
+    }
+
+    #content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .navbar-brand span {
+      font-weight: bold;
+    }
+
+    #sidebarCollapse {
+      background: none;
+      border: none;
+      color: #fff;
+    }
+
+    .badge-pendente { background-color: #ffc107; color: #212529; }
+    .badge-concluido { background-color: #28a745; color: white; }
+    .badge-cancelado { background-color: #dc3545; color: white; }
+
+    @media (max-width: 768px) {
+      #sidebar { margin-left: -250px; }
+      #sidebar.active { margin-left: 0; }
+      #content { margin-left: 0; }
+      #content.active { margin-left: 250px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar Superior -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+      <button type="button" id="sidebarCollapse" class="btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <a class="navbar-brand" href="#"><span>Sistema Admin</span></a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+            <i class="fas fa-user"></i> Usuário
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Configurações</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Sair</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <h4>Menu Principal</h4>
+    </div>
+    <ul class="list-unstyled components" id="menu-items">
+      <li class="active" data-page="dashboard">
+        <a href="#"><i class="fas fa-home mr-2"></i> Dashboard</a>
+      </li>
+      <li data-page="clientes">
+        <a href="#"><i class="fas fa-users mr-2"></i> Clientes</a>
+      </li>
+      <li data-page="produtos">
+        <a href="#"><i class="fas fa-box mr-2"></i> Produtos</a>
+      </li>
+      <li data-page="pedidos">
+        <a href="#"><i class="fas fa-shopping-cart mr-2"></i> Pedidos</a>
+      </li>
+      <li data-page="relatorios">
+        <a href="#"><i class="fas fa-chart-line mr-2"></i> Relatórios</a>
+      </li>
+      <li data-page="configuracoes">
+        <a href="#"><i class="fas fa-cog mr-2"></i> Configurações</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <div id="content">
+    <!-- Dashboard -->
+    <div class="page active" id="page-dashboard">
+      <div class="container-fluid">
+        <h2>Dashboard</h2>
+        <p class="lead">Bem-vindo ao sistema de gerenciamento.</p>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Clientes Ativos</h5>
+                <p class="card-text display-4" id="total-clientes">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Total de Produtos</h5>
+                <p class="card-text display-4" id="total-produtos">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Pedidos Pendentes</h5>
+                <p class="card-text display-4" id="total-pendentes">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Total de Pedidos</h5>
+                <p class="card-text display-4" id="total-pedidos">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clientes -->
+    <div class="page" id="page-clientes">
+      <div class="container-fluid">
+        <h2><i class="fas fa-users mr-2"></i> Clientes</h2>
+        <p class="lead">Gerencie seus clientes aqui.</p>
+        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modalCliente"><i class="fas fa-plus"></i> Novo Cliente</button>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered" id="tabela-clientes">
+            <thead class="thead-dark">
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Produtos -->
+    <div class="page" id="page-produtos">
+      <div class="container-fluid">
+        <h2><i class="fas fa-box mr-2"></i> Produtos</h2>
+        <p class="lead">Gerencie seu catálogo de produtos.</p>
+        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modalProduto"><i class="fas fa-plus"></i> Novo Produto</button>
+        <div class="row" id="lista-produtos"></div>
+      </div>
+    </div>
+
+    <!-- Pedidos -->
+    <div class="page" id="page-pedidos">
+      <div class="container-fluid">
+        <h2><i class="fas fa-shopping-cart mr-2"></i> Pedidos</h2>
+        <p class="lead">Gerencie os pedidos dos clientes.</p>
+        <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modalPedido"><i class="fas fa-plus"></i> Novo Pedido</button>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered" id="tabela-pedidos">
+            <thead class="thead-dark">
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Produtos</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Relatórios -->
+    <div class="page" id="page-relatorios">
+      <div class="container-fluid">
+        <h2><i class="fas fa-chart-line mr-2"></i> Relatórios</h2>
+        <p class="lead">Visualize métricas e relatórios do sistema.</p>
+        <div class="card">
+          <div class="card-body">
+            <h5>Vendas por Mês (últimos 6 meses)</h5>
+            <canvas id="chartVendas" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configurações -->
+    <div class="page" id="page-configuracoes">
+      <div class="container-fluid">
+        <h2><i class="fas fa-cog mr-2"></i> Configurações</h2>
+        <p class="lead">Ajuste as preferências do sistema.</p>
+        <form>
+          <div class="form-group">
+            <label>Nome do Sistema</label>
+            <input type="text" class="form-control" value="Sistema Admin" disabled>
+          </div>
+          <div class="form-group">
+            <label>E-mail de Notificações</label>
+            <input type="email" class="form-control" value="admin@empresa.com" disabled>
+          </div>
+          <div class="form-group">
+            <label>Moeda</label>
+            <select class="form-control" disabled>
+              <option>BRL - Real (R$)</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary">Configurações avançadas não implementadas</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cliente -->
+  <div class="modal fade" id="modalCliente" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tituloModalCliente">Novo Cliente</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="formCliente">
+            <input type="hidden" id="clienteId">
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" class="form-control" id="clienteNome" required>
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" class="form-control" id="clienteEmail" required>
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" class="form-control" id="clienteTelefone" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnSalvarCliente">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Produto -->
+  <div class="modal fade" id="modalProduto" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tituloModalProduto">Novo Produto</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="formProduto">
+            <input type="hidden" id="produtoId">
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" class="form-control" id="produtoNome" required>
+            </div>
+            <div class="form-group">
+              <label>Código</label>
+              <input type="text" class="form-control" id="produtoCodigo" required>
+            </div>
+            <div class="form-group">
+              <label>Descrição</label>
+              <textarea class="form-control" id="produtoDescricao" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Preço (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoPreco" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnSalvarProduto">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pedido -->
+  <div class="modal fade" id="modalPedido" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tituloModalPedido">Novo Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="formPedido">
+            <input type="hidden" id="pedidoId">
+            <div class="form-group">
+              <label>Cliente</label>
+              <select class="form-control" id="pedidoClienteId" required></select>
+            </div>
+            <div class="form-group">
+              <label>Produtos</label>
+              <div id="itensPedido">
+                <div class="d-flex mb-2">
+                  <select class="form-control mr-2 produto-select" required></select>
+                  <input type="number" class="form-control qtd-input" min="1" value="1" style="width:80px;" required>
+                  <button type="button" class="btn btn-danger btn-sm ml-2 remove-item">&times;</button>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="addProduto">+ Adicionar Produto</button>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select class="form-control" id="pedidoStatus" required>
+                <option value="pendente">Pendente</option>
+                <option value="concluido">Concluído</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnSalvarPedido">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Dados
+    let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+    let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+
+    // IDs
+    function proximoId(lista) {
+      return lista.length > 0 ? Math.max(...lista.map(i => i.id)) + 1 : 1;
+    }
+
+    // Salvar
+    function salvarDados() {
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+      localStorage.setItem('pedidos', JSON.stringify(pedidos));
+      atualizarDashboard();
+      renderizarClientes();
+      renderizarProdutos();
+      renderizarPedidos();
+      atualizarGrafico();
+    }
+
+    // Dashboard
+    function atualizarDashboard() {
+      const pendentes = pedidos.filter(p => p.status === 'pendente').length;
+      document.getElementById('total-clientes').textContent = clientes.length;
+      document.getElementById('total-produtos').textContent = produtos.length;
+      document.getElementById('total-pendentes').textContent = pendentes;
+      document.getElementById('total-pedidos').textContent = pedidos.length;
+    }
+
+    // Clientes
+    function renderizarClientes() {
+      const tbody = document.querySelector('#tabela-clientes tbody');
+      tbody.innerHTML = '';
+      clientes.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${c.id}</td>
+          <td>${c.nome}</td>
+          <td>${c.email}</td>
+          <td>${c.telefone}</td>
+          <td>
+            <button class="btn btn-sm btn-primary edit-cliente" data-id="${c.id}"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger delete-cliente" data-id="${c.id}"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Produtos
+    function renderizarProdutos() {
+      const container = document.getElementById('lista-produtos');
+      container.innerHTML = '';
+      produtos.forEach(p => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-4';
+        col.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">${p.nome}</h5>
+              <p class="text-muted">Código: ${p.codigo}</p>
+              <p class="card-text">${p.descricao || 'Sem descrição'}</p>
+              <h4 class="text-success">R$ ${parseFloat(p.preco).toFixed(2)}</h4>
+              <button class="btn btn-primary btn-sm edit-produto" data-id="${p.id}"><i class="fas fa-edit"></i> Editar</button>
+              <button class="btn btn-danger btn-sm delete-produto" data-id="${p.id}"><i class="fas fa-trash"></i> Excluir</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    // Pedidos
+    function renderizarPedidos() {
+      const tbody = document.querySelector('#tabela-pedidos tbody');
+      tbody.innerHTML = '';
+      pedidos.forEach(p => {
+        const cliente = clientes.find(c => c.id == p.clienteId)?.nome || 'Desconhecido';
+        const produtosNomes = p.itens.map(i => {
+          const prod = produtos.find(pr => pr.id == i.produtoId);
+          return `${prod?.nome || '???'} (x${i.quantidade})`;
+        }).join(', ');
+
+        let badgeClass = 'badge-pendente';
+        if (p.status === 'concluido') badgeClass = 'badge-concluido';
+        if (p.status === 'cancelado') badgeClass = 'badge-cancelado';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.id}</td>
+          <td>${cliente}</td>
+          <td>${produtosNomes}</td>
+          <td><span class="badge ${badgeClass}">${p.status}</span></td>
+          <td>${p.data}</td>
+          <td>
+            <button class="btn btn-sm btn-primary edit-pedido" data-id="${p.id}"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger delete-pedido" data-id="${p.id}"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Relatórios
+    let chartInstance = null;
+    function atualizarGrafico() {
+      const ctx = document.getElementById('chartVendas').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+
+      const meses = ['Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'];
+      const vendas = [3200, 4500, 3800, 5200, 4800, 6100];
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: meses,
+          datasets: [{
+            label: 'Vendas (R$)',
+            data: vendas,
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    // Preencher selects de cliente e produto nos modais
+    function preencherSelects() {
+      const clienteSelect = $('#pedidoClienteId');
+      clienteSelect.empty();
+      clientes.forEach(c => {
+        clienteSelect.append(`<option value="${c.id}">${c.nome}</option>`);
+      });
+
+      const produtoSelects = $('.produto-select');
+      produtoSelects.empty();
+      produtos.forEach(p => {
+        produtoSelects.append(`<option value="${p.id}">${p.nome}</option>`);
+      });
+    }
+
+    // Adicionar linha de produto no modal de pedido
+    function adicionarLinhaProduto(produtoId = '', qtd = 1) {
+      const div = document.createElement('div');
+      div.className = 'd-flex mb-2';
+      div.innerHTML = `
+        <select class="form-control mr-2 produto-select" required>
+          ${produtos.map(p => `<option value="${p.id}" ${p.id == produtoId ? 'selected' : ''}>${p.nome}</option>`).join('')}
+        </select>
+        <input type="number" class="form-control qtd-input" min="1" value="${qtd}" style="width:80px;" required>
+        <button type="button" class="btn btn-danger btn-sm ml-2 remove-item">&times;</button>
+      `;
+      document.getElementById('itensPedido').appendChild(div);
+    }
+
+    // Eventos
+    $(document).ready(function () {
+      $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+        $('#content').toggleClass('active');
+      });
+
+      $('#menu-items li').on('click', function() {
+        const page = $(this).data('page');
+        $('#menu-items li').removeClass('active');
+        $('.page').removeClass('active');
+        $(this).addClass('active');
+        $('#page-' + page).addClass('active');
+      });
+
+      // Cliente salvar
+      $('#btnSalvarCliente').on('click', function() {
+        const id = $('#clienteId').val();
+        const cliente = {
+          id: id ? parseInt(id) : proximoId(clientes),
+          nome: $('#clienteNome').val(),
+          email: $('#clienteEmail').val(),
+          telefone: $('#clienteTelefone').val()
+        };
+        if (id) {
+          const index = clientes.findIndex(c => c.id == id);
+          clientes[index] = cliente;
+        } else {
+          clientes.push(cliente);
+        }
+        salvarDados();
+        $('#modalCliente').modal('hide');
+        $('#formCliente')[0].reset();
+      });
+
+      // Produto salvar
+      $('#btnSalvarProduto').on('click', function() {
+        const id = $('#produtoId').val();
+        const produto = {
+          id: id ? parseInt(id) : proximoId(produtos),
+          nome: $('#produtoNome').val(),
+          codigo: $('#produtoCodigo').val(),
+          descricao: $('#produtoDescricao').val(),
+          preco: $('#produtoPreco').val()
+        };
+        if (id) {
+          const index = produtos.findIndex(p => p.id == id);
+          produtos[index] = produto;
+        } else {
+          produtos.push(produto);
+        }
+        salvarDados();
+        $('#modalProduto').modal('hide');
+        $('#formProduto')[0].reset();
+      });
+
+      // Pedido salvar
+      $('#btnSalvarPedido').on('click', function() {
+        const id = $('#pedidoId').val();
+        const itens = [];
+        $('#itensPedido .d-flex').each(function() {
+          const produtoId = $(this).find('.produto-select').val();
+          const qtd = $(this).find('.qtd-input').val();
+          if (produtoId && qtd > 0) {
+            itens.push({ produtoId: parseInt(produtoId), quantidade: parseInt(qtd) });
+          }
+        });
+
+        if (itens.length === 0) {
+          alert('Adicione pelo menos um produto ao pedido.');
+          return;
+        }
+
+        const pedido = {
+          id: id ? parseInt(id) : proximoId(pedidos),
+          clienteId: parseInt($('#pedidoClienteId').val()),
+          itens: itens,
+          status: $('#pedidoStatus').val(),
+          data: id ? $('#pedidoData').val() : new Date().toISOString().split('T')[0]
+        };
+
+        if (id) {
+          const index = pedidos.findIndex(p => p.id == id);
+          pedidos[index] = pedido;
+        } else {
+          pedidos.push(pedido);
+        }
+        salvarDados();
+        $('#modalPedido').modal('hide');
+        $('#formPedido')[0].reset();
+      });
+
+      // Abrir modal de novo pedido
+      $('#modalPedido').on('show.bs.modal', function () {
+        $('#tituloModalPedido').text('Novo Pedido');
+        $('#formPedido')[0].reset();
+        $('#itensPedido').empty();
+        adicionarLinhaProduto();
+        preencherSelects();
+      });
+
+      // Adicionar produto no modal
+      $(document).on('click', '#addProduto', function() {
+        adicionarLinhaProduto();
+        preencherSelects();
+      });
+
+      // Remover item do pedido
+      $(document).on('click', '.remove-item', function() {
+        if ($('#itensPedido .d-flex').length > 1) {
+          $(this).closest('.d-flex').remove();
+        }
+      });
+
+      // Editar/Excluir Clientes
+      $(document).on('click', '.edit-cliente', function() {
+        const id = $(this).data('id');
+        const cliente = clientes.find(c => c.id == id);
+        $('#clienteId').val(cliente.id);
+        $('#clienteNome').val(cliente.nome);
+        $('#clienteEmail').val(cliente.email);
+        $('#clienteTelefone').val(cliente.telefone);
+        $('#tituloModalCliente').text('Editar Cliente');
+        $('#modalCliente').modal('show');
+      });
+
+      $(document).on('click', '.delete-cliente', function() {
+        if (confirm('Excluir cliente?')) {
+          const id = $(this).data('id');
+          clientes = clientes.filter(c => c.id != id);
+          salvarDados();
+        }
+      });
+
+      // Editar/Excluir Produtos
+      $(document).on('click', '.edit-produto', function() {
+        const id = $(this).data('id');
+        const produto = produtos.find(p => p.id == id);
+        $('#produtoId').val(produto.id);
+        $('#produtoNome').val(produto.nome);
+        $('#produtoCodigo').val(produto.codigo);
+        $('#produtoDescricao').val(produto.descricao);
+        $('#produtoPreco').val(produto.preco);
+        $('#tituloModalProduto').text('Editar Produto');
+        $('#modalProduto').modal('show');
+      });
+
+      $(document).on('click', '.delete-produto', function() {
+        if (confirm('Excluir produto?')) {
+          const id = $(this).data('id');
+          produtos = produtos.filter(p => p.id != id);
+          salvarDados();
+        }
+      });
+
+      // Editar Pedido
+      $(document).on('click', '.edit-pedido', function() {
+        const id = $(this).data('id');
+        const pedido = pedidos.find(p => p.id == id);
+        $('#pedidoId').val(pedido.id);
+        $('#pedidoClienteId').val(pedido.clienteId);
+        $('#pedidoStatus').val(pedido.status);
+        $('#itensPedido').empty();
+        pedido.itens.forEach(item => {
+          adicionarLinhaProduto(item.produtoId, item.quantidade);
+        });
+        $('#tituloModalPedido').text('Editar Pedido');
+        $('#modalPedido').modal('show');
+        preencherSelects();
+      });
+
+      // Excluir Pedido
+      $(document).on('click', '.delete-pedido', function() {
+        if (confirm('Excluir pedido?')) {
+          const id = $(this).data('id');
+          pedidos = pedidos.filter(p => p.id != id);
+          salvarDados();
+        }
+      });
+
+      // Inicializar
+      atualizarDashboard();
+      renderizarClientes();
+      renderizarProdutos();
+      renderizarPedidos();
+      atualizarGrafico();
+    });
+  </script>
+</body>
+</html>
